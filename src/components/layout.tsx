@@ -1,6 +1,6 @@
 import { FC, ReactElement } from 'react';
 
-import Navbar from './navbar';
+import Navbar from './Navbar';
 
 type LayoutProps = {
   children: ReactElement;

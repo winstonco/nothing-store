@@ -1,4 +1,4 @@
-import ItemLink from '@/components/item-link';
+import ItemLink from '@/components/ItemLink';
 import { NextPageWithLayout } from '../_app';
 import FeaturedLayout from './_featured-layout';
 
