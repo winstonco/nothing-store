@@ -1,17 +1,10 @@
 import Stripe from 'stripe';
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { MouseEventHandler } from 'react';
 
-import getStripe from '@/utils/get-stripe';
-import { MAX_AMOUNT, MIN_AMOUNT } from '@/_config';
+import getStripe from '@/utils/getStripe';
 
 const CheckoutForm = () => {
-  const [amount, setAmount] = useState<number>(MIN_AMOUNT);
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setAmount(parseInt(e.target.value));
-  };
-
-  const handleSubmit = async (e: FormEvent) => {
+  const handleCheckout: MouseEventHandler<HTMLButtonElement> = async (e) => {
     e.preventDefault();
     // Create a Checkout Session.
     const checkoutSession: Stripe.Checkout.Session = await (
@@ -26,7 +19,9 @@ const CheckoutForm = () => {
         },
         redirect: 'follow', // manual, *follow, error
         referrerPolicy: 'no-referrer', // no-referrer, *client
-        body: JSON.stringify({ amount }), // body data type must match "Content-Type" header
+        body: JSON.stringify({
+          cart: JSON.parse(window.sessionStorage.getItem('cart') ?? ''),
+        }), // body data type must match "Content-Type" header
       })
     ).json();
 
@@ -51,27 +46,9 @@ const CheckoutForm = () => {
 
   return (
     <div className="w-100 h-100 flex flex-col items-center">
-      <h2>Enter an amount below:</h2>
-      <form
-        onSubmit={handleSubmit}
-        className="flex flex-col items-center gap-1"
-      >
-        <input
-          className="w-20 border-2 border-neutral-900 rounded-xl px-3"
-          type="number"
-          name="amount"
-          min={MIN_AMOUNT}
-          max={MAX_AMOUNT}
-          onChange={handleChange}
-          value={amount}
-          required
-        />
-        <input
-          className="w-20 border-2 border-neutral-900 rounded-xl px-2"
-          type="submit"
-          value="Pay"
-        />
-      </form>
+      <h2>Cart</h2>
+      <ul>Cart items</ul>
+      <button onClick={handleCheckout}>Proceed to Checkout</button>
     </div>
   );
 };

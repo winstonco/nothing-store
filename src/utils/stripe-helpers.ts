@@ -17,3 +17,12 @@ export const getPriceIdForStripe = async (amount: number, currency: string) => {
   });
   return price.id;
 };
+
+// NOT NEEDED
+export const createProduct = async (name: string, images: string[]) => {
+  const product = await stripe.products.create({ name, images });
+  return {
+    id: product.id,
+    price: product.default_price,
+  };
+};

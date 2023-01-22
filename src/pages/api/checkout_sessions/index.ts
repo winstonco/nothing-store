@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
 import { CURRENCY, MIN_AMOUNT, MAX_AMOUNT } from '../../../_config';
-import { getPriceIdForStripe } from '../../../utils/stripe-helpers';
 // import { STRIPE_SECRET_KEY } from '@/checkEnvVars';
 
 import Stripe from 'stripe';
@@ -16,6 +15,8 @@ export default async function handler(
 ) {
   if (req.method === 'POST') {
     const amount: number = req.body.amount;
+    const cart: string[] = req.body.cart;
+
     try {
       // Validate the amount that was passed from the client.
       if (!(amount >= MIN_AMOUNT && amount <= MAX_AMOUNT)) {
@@ -27,12 +28,9 @@ export default async function handler(
         success_url: `${req.headers.origin}/result?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${req.headers.origin}/donate-with-checkout`,
         currency: CURRENCY,
-        line_items: [
-          {
-            price: await getPriceIdForStripe(amount, CURRENCY),
-            quantity: 1,
-          },
-        ],
+        line_items: cart.map((price) => {
+          return { price, quantity: 1 };
+        }),
         metadata: {
           name: 'Custom amount donation',
         },

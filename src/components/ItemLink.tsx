@@ -1,14 +1,20 @@
+import Image from 'next/image';
 import Link from 'next/link';
-import { ReactElement } from 'react';
 
 const ItemLink = ({
   itemId,
-  children,
+  itemName,
+  imageSrc,
 }: {
-  itemId: number;
-  children: ReactElement;
+  itemId: string;
+  itemName: string;
+  imageSrc: string;
 }) => {
-  return <Link href={`/item/${itemId}`}>{children}</Link>;
+  return (
+    <Link href={`/item/${itemId}`}>
+      <Image src={imageSrc} alt={itemName} width={50} height={50} />
+    </Link>
+  );
 };
 
 export default ItemLink;

@@ -8,6 +8,7 @@ import { ReactElement, ReactNode } from 'react';
 // checkEnvVars();
 import checkConfigs from '@/_config';
 checkConfigs();
+if (typeof window !== 'undefined') window.sessionStorage.clear();
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
